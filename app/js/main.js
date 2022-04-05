@@ -1,59 +1,89 @@
 $(function () {
-  $(".top-slider__inner").slick({
-    dots: true,
-    arrows: false,
-    fade: true,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  });
+    $(".shop-content__filter-btn").on("click", function () {
+        $(".shop-content__filter-btn").removeClass(
+            "shop-content__filter-btn--active"
+        );
+        $(this).addClass("shop-content__filter-btn--active");
+    });
 
-  $(".star").rateYo({
-    starWidth: "17px",
-    normalFill: "#ccccce",
-    ratedFill: "#ffc35b",
-    readOnly: true,
-  });
+    $(".button-list").on("click", function () {
+        $(".product-item").addClass("product-item--list");
+    });
 
-  function getTimeRemaining(endtime) {
-    const total = Date.parse(endtime) - Date.parse(new Date());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+    $(".button-grid").on("click", function () {
+        $(".product-item").removeClass("product-item--list");
+    });
 
-    return {
-      total,
-      days,
-      hours,
-      minutes,
-      seconds,
-    };
-  }
+    $(".select-styler").styler();
 
-  function initializeClock(className, endtime) {
-    const clock = document.querySelector(className);
-    const daysSpan = clock.querySelector(".promo__days");
-    const hoursSpan = clock.querySelector(".promo__hours");
-    const minutesSpan = clock.querySelector(".promo__minutes");
-    const secondsSpan = clock.querySelector(".promo__seconds");
+    $(".filter-price__input").ionRangeSlider({
+        type: "double",
+        prefix: "$",
+        onStart: function (data) {
+            $(".filter-price__from").text(data.from);
+            $(".filter-price__to").text(data.to);
+        },
+        onChange: function (data) {
+            $(".filter-price__from").text(data.from);
+            $(".filter-price__to").text(data.to);
+        },
+    });
 
-    function updateClock() {
-      const t = getTimeRemaining(endtime);
+    $(".top-slider__inner").slick({
+        dots: true,
+        arrows: false,
+        fade: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
+    });
 
-      daysSpan.innerHTML = t.days;
-      hoursSpan.innerHTML = ("0" + t.hours).slice(-2);
-      minutesSpan.innerHTML = ("0" + t.minutes).slice(-2);
-      secondsSpan.innerHTML = ("0" + t.seconds).slice(-2);
+    $(".star").rateYo({
+        starWidth: "17px",
+        normalFill: "#ccccce",
+        ratedFill: "#ffc35b",
+        readOnly: true,
+    });
 
-      if (t.total <= 0) {
-        clearInterval(timeinterval);
-      }
+    function getTimeRemaining(endtime) {
+        const total = Date.parse(endtime) - Date.parse(new Date());
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+        return {
+            total,
+            days,
+            hours,
+            minutes,
+            seconds,
+        };
     }
 
-    updateClock();
-    const timeinterval = setInterval(updateClock, 1000);
-  }
+    function initializeClock(className, endtime) {
+        const clock = document.querySelector(className);
+        const daysSpan = clock.querySelector(".promo__days");
+        const hoursSpan = clock.querySelector(".promo__hours");
+        const minutesSpan = clock.querySelector(".promo__minutes");
+        const secondsSpan = clock.querySelector(".promo__seconds");
 
-  const deadline = $(".promo__clock").attr("data-time");
-  initializeClock(".promo__clock", deadline);
+        function updateClock() {
+            const t = getTimeRemaining(endtime);
+
+            daysSpan.innerHTML = t.days;
+            hoursSpan.innerHTML = ("0" + t.hours).slice(-2);
+            minutesSpan.innerHTML = ("0" + t.minutes).slice(-2);
+            secondsSpan.innerHTML = ("0" + t.seconds).slice(-2);
+
+            if (t.total <= 0) {
+                clearInterval(timeinterval);
+            }
+        }
+
+        updateClock();
+        const timeinterval = setInterval(updateClock, 1000);
+    }
+
+    const deadline = $(".promo__clock").attr("data-time");
+    initializeClock(".promo__clock", deadline);
 });
